@@ -1,8 +1,9 @@
 const express =  require('express');
 const bodyParser = require('body-parser');
-
+var authenticate = require('../authenticate');
 const dishRouter = express.Router();
 const DishController = require('../Controller/DishController')
+var authenticate = require('../authenticate');
 
 // dishRouter.route('/')
 //   .get((req,res,next) => {
@@ -25,13 +26,13 @@ const DishController = require('../Controller/DishController')
 //   })
 
 dishRouter.get('/' , DishController.index )
-dishRouter.post('/' , DishController.add)
-dishRouter.put('/', DishController.update)
-dishRouter.delete('/' , DishController.deleteDish)
+dishRouter.post('/' ,authenticate.verifyUser, DishController.add)
+dishRouter.put('/',authenticate.verifyUser, DishController.update)
+dishRouter.delete('/' ,authenticate.verifyUser, DishController.deleteDish)
 
 // By Id
-dishRouter.route('/:dishId').get(DishController.getById)
-                            .put(DishController.updateById)
-                            .delete(DishController.deleteById)
+dishRouter.route('/:dishId').get(authenticate.verifyUser, DishController.getById)
+                            .put(authenticate.verifyUser, DishController.updateById)
+                            .delete(authenticate.verifyUser, DishController.deleteById)
 module.exports = dishRouter;
 
