@@ -1,24 +1,27 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Currency = mongoose.SchemaTypes.Decimal128;
+// cmmt schema
 var commentSchema = new Schema({
-    rating : {
-        type : Number,
-        min: 1,
-        max : 5,
-        required : true
-    },
-    comment: {
-        type : String,
-        required: true
-    },
-    author: {
-        type : String,
-        required: true
-    }
-},{
-    timestamps: true
-})
+        rating:  {
+            type: Number,
+            min: 1,
+            max: 5,
+            required: true
+        },
+        comment:  {
+            type: String,
+            required: true
+        },
+        author: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    }, {
+        timestamps: true
+    });
+    
+    
 const DishesSchema = new Schema({
     name: {
         type: String,

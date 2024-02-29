@@ -4,22 +4,25 @@ var authenticate = require('../authenticate');
 
 
 const signUp = (req, res, next) => {
-    User.register(new User({ username: req.body.username }),
-        req.body.password, (err, user) => {
-            if (err) {
-                res.statusCode = 500;
-                res.setHeader('Content-Type', 'application/json');
-                res.json({ err: err });
-            }
-            else {
-                passport.authenticate('local')(req, res, () => {
-                    res.statusCode = 200;
-                    res.setHeader('Content-Type', 'application/json');
-                    res.json({ success: true, status: 'Registration Successful!' });
-                });
-            }
-        });
-}
+    User.register(new User({ username: req.body.username }), req.body.password)
+      .then(user => {
+        if (req.body.firstname) user.firstname = req.body.firstname;
+        if (req.body.lastname) user.lastname = req.body.lastname;
+        return user.save();
+      })
+      .then(user => {
+        const token = authenticate.getToken({ _id: user._id });
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json({ success: true, status: 'Registration Successful!', token: token });
+      })
+      .catch(err => {
+        res.statusCode = 500;
+        res.setHeader('Content-Type', 'application/json');
+        res.json({ err: err });
+      });
+  };
+    
 
 
 const logIn = (req, res, next) => {

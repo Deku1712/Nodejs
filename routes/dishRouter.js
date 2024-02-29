@@ -4,6 +4,7 @@ var authenticate = require('../authenticate');
 const dishRouter = express.Router();
 const DishController = require('../Controller/DishController')
 var authenticate = require('../authenticate');
+const cors = require('cors');
 
 // dishRouter.route('/')
 //   .get((req,res,next) => {
@@ -34,5 +35,14 @@ dishRouter.delete('/' ,authenticate.verifyUser, DishController.deleteDish)
 dishRouter.route('/:dishId').get(authenticate.verifyUser, DishController.getById)
                             .put(authenticate.verifyUser, DishController.updateById)
                             .delete(authenticate.verifyUser, DishController.deleteById)
+
+
+dishRouter.route('/:dishId/comments').get(DishController.comment)
+                                    .post(authenticate.verifyUser, DishController.addComment)
+
+dishRouter.route('/:dishId/comments/:commentId').get(DishController.commentById)
+                                                .put( authenticate.verifyUser, DishController.updateCmt)
+                                                .delete( authenticate.verifyUser, DishController.deleteComment)
+
 module.exports = dishRouter;
 
