@@ -1,48 +1,33 @@
-const express =  require('express');
+const express = require('express');
 const bodyParser = require('body-parser');
-var authenticate = require('../authenticate');
+const authenticate = require('../authenticate');
 const dishRouter = express.Router();
-const DishController = require('../Controller/DishController')
-var authenticate = require('../authenticate');
-const cors = require('cors');
+const DishController = require('../Controller/DishController');
+const cors = require('./Cors');
 
-// dishRouter.route('/')
-//   .get((req,res,next) => {
-//     res.end('Will send all dishes to hahaha')
-//   })
-//   .post((req,res,next) => {
-//     res.end('Will add the dish: ' + req.body.name +'with details: ' + req.body.decriptions)
-//   });
-// dishRouter.route('/:dishId')
-//   .get((req,res,next) => {
-//     res.end('will send dish : ' + req.params.dishId)
-//   })
-//   .put((req, res, next) => {
-//     res.statusCode = 200;
-//     res.end('update dished : ' + req.params.dishId + ' dish name: ' + req.body.name + 'dish des :' + req.body.decriptions);
-//   })
-//   .delete((req,res,next) => {
-//     res.statusCode = 200;
-//     res.end('deleting dish susscess : ' + req.params.dishId);
-//   })
+dishRouter.use(bodyParser.json());
 
-dishRouter.get('/' , DishController.index )
-dishRouter.post('/' ,authenticate.verifyUser, DishController.add)
-dishRouter.put('/',authenticate.verifyUser, DishController.update)
-dishRouter.delete('/' ,authenticate.verifyUser, DishController.deleteDish)
+// Áp dụng CORS cho tất cả các tuyến đường trong dishRouter
+dishRouter.use(cors.cors);
 
-// By Id
-dishRouter.route('/:dishId').get(authenticate.verifyUser, DishController.getById)
-                            .put(authenticate.verifyUser, DishController.updateById)
-                            .delete(authenticate.verifyUser, DishController.deleteById)
+dishRouter.route('/').options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
+    .get(DishController.index)
+    .post(authenticate.verifyUser, DishController.add)
+    .put(authenticate.verifyUser, DishController.update)
+    .delete(authenticate.verifyUser, DishController.deleteDish);
 
+dishRouter.route('/:dishId').options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
+    .get(authenticate.verifyUser, DishController.getById)
+    .put(authenticate.verifyUser, DishController.updateById)
+    .delete(authenticate.verifyUser, DishController.deleteById);
 
-dishRouter.route('/:dishId/comments').get(DishController.comment)
-                                    .post(authenticate.verifyUser, DishController.addComment)
+dishRouter.route('/:dishId/comments').options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
+    .get(DishController.comment)
+    .post(authenticate.verifyUser, DishController.addComment);
 
-dishRouter.route('/:dishId/comments/:commentId').get(DishController.commentById)
-                                                .put( authenticate.verifyUser, DishController.updateCmt)
-                                                .delete( authenticate.verifyUser, DishController.deleteComment)
+dishRouter.route('/:dishId/comments/:commentId').options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
+    .get(DishController.commentById)
+    .put(authenticate.verifyUser, DishController.updateCmt)
+    .delete(authenticate.verifyUser, DishController.deleteComment);
 
 module.exports = dishRouter;
-
