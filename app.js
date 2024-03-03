@@ -20,7 +20,7 @@ const docRouter = require("./routes/documentRouter");
 const youRouter = require("./routes/youtubeRouter");
 const cakeRoute = require("./routes/CakeRoute");
 const userRoute = require('./routes/UserRouter')
-const uploadRouter = require('./routes/uploadRouter');
+const uploadRouter = require('./routes/uploadRouter')
 //
 // connection mongoose db
 mongoose.connect(config.mongoUrl)
