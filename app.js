@@ -20,6 +20,7 @@ const docRouter = require("./routes/documentRouter");
 const youRouter = require("./routes/youtubeRouter");
 const cakeRoute = require("./routes/CakeRoute");
 const userRoute = require('./routes/UserRouter')
+const uploadRouter = require('./routes/uploadRouter');
 //
 // connection mongoose db
 mongoose.connect(config.mongoUrl)
@@ -84,6 +85,7 @@ app.use("/toppings", toppingRouter);
 app.use("/cakes", cakeRoute);
 app.use("/document", docRouter);
 app.use("/youtubes", youRouter);
+app.use('/imageUpload',uploadRouter);
 
 // 404 Error handling
 app.use(function (req, res, next) {
