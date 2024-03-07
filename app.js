@@ -7,8 +7,11 @@ var passport = require('passport');
 var authenticate = require('./authenticate');
 var config = require('./config');
 const mongoose = require('mongoose');
+const cors = require('cors')
 
 var config = require('./config');
+
+
 
 
 // Require routes

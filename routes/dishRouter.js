@@ -8,10 +8,10 @@ const cors = require('./Cors');
 dishRouter.use(bodyParser.json());
 
 // Áp dụng CORS cho tất cả các tuyến đường trong dishRouter
-dishRouter.use(cors.cors);
+
 
 dishRouter.route('/').options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
-    .get(DishController.index)
+    .get(cors.cors, DishController.index)
     .post(authenticate.verifyUser, DishController.add)
     .put(authenticate.verifyUser, DishController.update)
     .delete(authenticate.verifyUser, DishController.deleteDish);
